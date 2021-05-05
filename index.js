@@ -1,4 +1,4 @@
-const { createStore } = require('redux')
+const { createStore, combineReducers } = require('redux')
 
 const filters = {
     all: 'ALL',
@@ -32,18 +32,22 @@ const todosReducer = (state = [], action) => {
         case ADD_TODO:
             return [action.payload].concat(state)
         case COMPLETE_TODO:
-            return state.todos.map((x, i) => i === action.payload ? { ...x, completed: true } : x)
+            return state.map((x, i) => i === action.payload ? { ...x, completed: true } : x)
         default:
             return state
     }
 }
+const reducer = combineReducers({
+    filter: filterReducer,
+    todos: todosReducer,
+});
 
-const reducer  = (state = {}, action) => {
+/*const reducer  = (state = {}, action) => {
     return {
         filter: filterReducer(state.filter, action),
         todos: todosReducer(state.todos, action),
     }
-    /*switch (action.type) {
+    switch (action.type) {
         case SET_FILTER:
             return {
                 ...state,
@@ -61,8 +65,8 @@ const reducer  = (state = {}, action) => {
             }
         default:
             return state
-    }*/
-}
+    }
+}*/
 
 const store = createStore(reducer)
 
